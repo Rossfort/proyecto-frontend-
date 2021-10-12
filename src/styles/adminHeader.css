@@ -1,0 +1,42 @@
+.admin-nav-header {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E5E7EB;
+  border-right: 1px solid #E5E7EB;
+  text-align: center;
+  padding: 0 1.25em;
+  width: 200px;
+  line-height: 74px;
+  height: 75px;
+}
+
+.admin-nav {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1020;
+  width: 200px;
+  border-right: 1px solid #E5E7EB;
+  background-color: #F9FAFB;
+}
+
+.nav-item .active {
+  background: #3D76F1;
+  color: white;
+}
+
+.main-header {
+  position: absolute;
+  background-color: #F9FAFB;
+  padding: 15px 30px;
+  border-bottom: 1px solid #E5E7EB;
+  height: 75px;
+  top:0;
+  right: 0;
+  left: 200px;
+}
+
+.admin-content-wrapper{
+  margin-top: 100px;
+  margin-left: 200px;
+}
