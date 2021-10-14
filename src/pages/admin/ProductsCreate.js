@@ -57,9 +57,11 @@ const ProductsCreate = () => {
       const formData = new FormData();
       formData.append('product[title]', values.name);
       formData.append('product[category_id]', selectedCategory.value);
-      console.log(selectedCategory)
       Object.entries(propertiesValues).forEach(([k, v]) => {
-        formData.append('product[product_properties_ids][]', v.product_property_id);
+        formData.append(
+            'product[product_properties_ids][]',
+            v.product_property_id,
+        );
       });
       files.forEach((item) => formData.append('product[images][]', item.file));
       console.log('asdasd');
@@ -77,7 +79,7 @@ const ProductsCreate = () => {
     },
   });
 
-  console.log(fform)
+  console.log(fform);
 
   const updateFiles = (incommingFiles) => {
     setFiles(incommingFiles);
