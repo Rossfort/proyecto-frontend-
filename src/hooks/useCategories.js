@@ -11,7 +11,7 @@ const useCategories = () => {
   const normalCategoriesShow = (category, queryParams) => {
     return axios.get(
         process.env.REACT_APP_BASE_API_URL +
-        `/api/categories/${category}${queryParams}`,
+        `/api/categories/${category}?${queryParams}`,
     );
   };
 
@@ -64,6 +64,12 @@ const useCategories = () => {
     );
   };
 
+  const search = (name, queryString) => {
+    debugger
+    return axios.get(process.env.REACT_APP_BASE_API_URL +
+      `/api/categories/${name}?${queryString ? queryString : ''}`);
+  };
+
   return {
     index,
     normalIndex,
@@ -73,6 +79,7 @@ const useCategories = () => {
     adminEdit,
     updateCategory,
     getPropertyTypes,
+    search,
   };
 };
 

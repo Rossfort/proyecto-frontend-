@@ -1,8 +1,14 @@
-const useParams = (params) => {
+const useParams = (params, scope = null) => {
   const serialize = (params) => {
     const str = [];
     Object.entries(params).forEach(([key, val]) => {
-      str.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+      if (val.length > 1) {
+        val.forEach((item) => {
+          str.push( `${scope ? `${scope}[${encodeURIComponent(key)}][]` : encodeURIComponent(key)}=${encodeURIComponent(item)}`);
+        });
+      } else {
+        str.push( `${scope ? `${scope}[${encodeURIComponent(key)}][]` : encodeURIComponent(key)}=${encodeURIComponent(val)}`);
+      }
     });
     return str.join('&');
   };
@@ -10,7 +16,7 @@ const useParams = (params) => {
   const removeOffset = (params) => {
     const str = [];
     Object.entries(params).forEach(([key, val]) => {
-      str.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+      str.push( `${scope ? `${scope}[${encodeURIComponent(key)}][]` : encodeURIComponent(key)}=${encodeURIComponent(val)}`);
     });
     str.pop();
     return str.join('&');

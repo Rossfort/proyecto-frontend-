@@ -19,6 +19,10 @@ const Product = () => {
   const [hasVariants, setHasVariants] = React.useState(false);
   const dispatch = useDispatch();
   const {id} = useParams();
+  const formatter = new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: 'CLP',
+  });
 
   const product = useSelector((state) => selectProduct(state, +id));
   const productsStatus = useSelector((state) => state.product.status);
@@ -67,6 +71,18 @@ const Product = () => {
 
 
   let content;
+  let renderProperties;
+  if (product) {
+    renderProperties = product.variants[0].properties.map((item) => {
+      return (
+        <>
+          <dt>{item.name}</dt>
+          <dd>{item.value}</dd>
+        </>
+      );
+    },
+    );
+  }
 
   if (productsStatus === 'loading') {
     content = <Spinner
@@ -87,8 +103,10 @@ const Product = () => {
       </Col>
       <Col md={6}>
         <h1 className="text-center">{product.title}</h1>
-        <h2 className="text-center">{product.master_price}</h2>
-        <h5 className="text-center">{product.description}</h5>
+        <h2 className="text-center">{formatter.format(product.master_price)}</h2>
+        <dl>
+          {renderProperties}
+        </dl>
         {hasVariants ? <select
           className="form-select"
           onChange={handleSelected}>

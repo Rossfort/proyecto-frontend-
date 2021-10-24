@@ -5,6 +5,8 @@ import useForm from '../../hooks/useForm';
 import useVariants from '../../hooks/useVariants';
 import AdminSpinner from '../../components/AdminSpinner';
 import ProductMenu from '../../components/ProductMenu';
+import {useFormik, Formik, Form, Field, ErrorMessage, FieldArray} from 'formik';
+import useProducts from '../../hooks/useProducts';
 
 const VariantsEdit = () => {
   const {handleChange, values, setValues} = useForm({
@@ -13,38 +15,62 @@ const VariantsEdit = () => {
     stock: '',
   });
   const {productId, id} = useParams();
+  const {properties} = useProducts();
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [errors, setErrors] = React.useState({});
   const [submitStatus, setSubmitStatus] = React.useState('idle');
   const [isLoading, setIsLoading] = React.useState(false);
   const {edit, editPatch} = useVariants();
+  const [props, setProps] = React.useState([]);
+  const [initialValues, setInitialValues] = React.useState({});
 
   React.useEffect(() => {
     getVariant();
   }, [id]);
 
+  React.useEffect(() => {
+    properties(productId)
+        .then((res) => {
+          setProps(res.data);
+        });
+  }, [productId]);
+
   const getVariant = () => {
     setIsLoading(true);
     edit(id)
         .then((res) => {
-          setValues(
-              {
-                size: res.data.size,
-                price: res.data.price,
-                stock: res.data.stock,
-              },
-          );
+          const values = {
+            variant: {
+              price: res.data.price,
+              stock: res.data.stock,
+            },
+            product_property: {},
+          };
+          res.data.product_properties.forEach((item) => {
+            values.product_property[item.property_id] = {value: item.value};
+          });
+          setInitialValues(values);
           setIsLoading(false);
         });
   };
 
-  const handleSubmit = () => {
-    setIsLoading(true);
+  const handleSubmit = (values) => {
     const formData = new FormData();
-    formData.append('variant[size]', values.size);
-    formData.append('variant[price]', values.price);
-    formData.append('variant[stock]', values.stock);
+    formData.append('variant[price]', values.variant.price);
+    formData.append('variant[stock]', values.variant.stock);
+    formData.append('variant[size]', 'a');
+    console.log(values, 'submit');
+    Object.entries(values.product_property).forEach(([key, val], index) => {
+      formData.append(
+          `variant[product_properties_attributes][${index}][value]`,
+          val.value,
+      );
+      formData.append(
+          `variant[product_properties_attributes][${index}][property_id]`,
+          key,
+      );
+    });
     editPatch(id, formData)
         .then(() => {
           setSubmitStatus('success');
@@ -88,6 +114,25 @@ const VariantsEdit = () => {
     setIsSubmitting(true);
   };
 
+  const renderProperties = props.map((item) => {
+    return (
+      <div key={item.id}>
+        <label
+          htmlFor={`product_property-${item.id.toString()}`}
+          className='form-label'
+        >
+          {item.name}
+        </label>
+        <Field
+          id={`product_property.${item.id.toString()}.value`}
+          type='text'
+          name={`product_property.${item.id.toString()}.value`}
+          className='form-control'
+        />
+      </div>
+    );
+  });
+
   return (
     <>
       {isLoading && <AdminSpinner />}
@@ -108,68 +153,42 @@ const VariantsEdit = () => {
         }
         <ProductMenu variant="variant" productId={productId}/>
         <fieldset>
-          <form onSubmit={handleForm}>
-            <label
-              className="form-label"
-              htmlFor="size"
-            >
-              Talla
-            </label>
-            {errors.size && <p
-              className="alert alert-warning"
-            >
-              {errors.size}
-            </p>}
-            <input
-              className="form-control"
-              onChange={handleChange}
-              id="size"
-              type="text"
-              name="size"
-              value={values.size}
-            />
-            <label
-              htmlFor="price"
-            >
-              Precio
-            </label>
-            {errors.price && <p
-              className="alert alert-warning"
-            >
-              {errors.price}
-            </p>}
-            <input
-              onChange={handleChange}
-              id="price"
-              name="price"
-              className="form-control"
-              type="number"
-              value={values.price}
-            />
-            <label
-              htmlFor="stock"
-            >
-              Stock
-            </label>
-            {errors.stock && <p
-              className="alert alert-warning"
-            >
-              {errors.stock}
-            </p>}
-            <input
-              onChange={handleChange}
-              id="stock"
-              name="stock"
-              className="form-control"
-              type="number"
-              value={values.stock}
-            />
-            <input
-              className="btn btn-primary mt-2"
-              type="submit"
-              value="Crear"
-            />
-          </form>
+          <Formik
+            enableReinitialize={true}
+            initialValues={initialValues}
+            onSubmit={(values) => handleSubmit(values)}
+          >
+            {(a) => {
+              console.log(a.values);
+              return (
+                <Form>
+                  <label htmlFor="variant-price">Precio</label>
+                  <Field
+                    type='text'
+                    id='variant-price'
+                    name='variant[price]'
+                    className='form-control'
+                  />
+                  <ErrorMessage name='variant[price]' component='div'/>
+                  <label htmlFor="variant-stock">Stock</label>
+                  <Field
+                    type='text'
+                    id='variant-stock'
+                    name='variant[stock]'
+                    className='form-control'
+                  />
+                  <ErrorMessage name='variant[stock]' component='div' />
+                  {renderProperties}
+                  <button
+                    type='submit'
+                    className='btn btn-primary'
+                  >
+                  Guardar
+                  </button>
+                </Form>
+              );
+            }}
+          </Formik>
         </fieldset>
       </div>
     </>

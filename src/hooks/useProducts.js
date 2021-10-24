@@ -45,6 +45,14 @@ const useProducts = () => {
     );
   };
 
-  return {search, restore, remove, edit, editPatch, create};
+  const properties = (id) => {
+    return axios.get(
+        process.env.REACT_APP_BASE_API_URL +
+      `/api/admin/products/${id}/properties`,
+        {withCredentials: true},
+    );
+  };
+
+  return {search, restore, remove, edit, editPatch, create, properties};
 };
 export default useProducts;
