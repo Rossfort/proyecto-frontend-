@@ -31,10 +31,10 @@ const VariantsCreate = () => {
     formData.append('variant[price]', values.variant.price);
     formData.append('variant[stock]', values.variant.stock);
     formData.append('variant[size]', 'a');
-    values.product_property.forEach((item, index) => {
-      if (item !== undefined) {
-        formData.append(`variant[product_properties_attributes][${index}][value]`, item.value);
-        formData.append(`variant[product_properties_attributes][${index}][property_id]`, index);
+    Object.entries(values.product_property).forEach(([k, v], index) => {
+      if (v !== undefined) {
+        formData.append(`variant[product_properties_attributes][${index}][value]`, v.value);
+        formData.append(`variant[product_properties_attributes][${index}][property_id]`, k);
       }
     });
     create(id, formData)

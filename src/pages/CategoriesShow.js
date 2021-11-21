@@ -75,8 +75,6 @@ const CategoriesShow = () => {
     setFilters(arr);
   };
 
-  console.log(filters);
-
   const renderProperties = propertyTypes.map((item) =>
     <Select
       key={item.id}
@@ -125,7 +123,7 @@ const CategoriesShow = () => {
       >
         {renderProperties}
       </Col>
-      <Col className='d-flex flex-wrap justify-content-between'>
+      <Col className='d-flex flex-wrap justify-content-between products-container'>
         {productHolder ? undefined : renderArr}
       </Col>
       <div className="d-flex justify-content-center">
