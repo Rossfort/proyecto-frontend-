@@ -31,6 +31,7 @@ import {useDispatch} from 'react-redux';
 import {loadCart} from './features/cart/cartSlice';
 import {authAutoLogin} from './features/auth/authSlice';
 import PrivateRoute from './components/PrivateRoute';
+import Contact from './pages/Contact';
 import './App.css';
 
 function App() {
@@ -55,6 +56,9 @@ function App() {
           </Route>
           <Route exact path="/cart">
             <Cart />
+          </Route>
+          <Route exact path="/contact">
+            <Contact />
           </Route>
           <Route exact path="/order/new">
             <OrderNew />

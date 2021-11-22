@@ -6,6 +6,7 @@ import {Link, useLocation} from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
 import Pagination from '../components/Pagination';
 import AsyncSelect from 'react-select/async';
+import '../styles/products.css';
 
 const Product = () => {
   const [products, setProducts] = React.useState([]);
@@ -24,7 +25,7 @@ const Product = () => {
   const getProducts = () => {
     setIsloading(true);
     axios.get(
-        process.env.REACT_APP_BASE_API_URL + `/api/products${
+        process.env.REACT_APP_BASE_API_URL + `/api/products/search?search=${
           queryString ? queryString : '' }`, {withCredentials: true})
         .then((res) => {
           setProducts(res.data.products);

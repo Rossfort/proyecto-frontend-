@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Link,
   useLocation,
+  useHistory,
 } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -9,12 +10,17 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import AdminHeader from './AdminHeader';
 import Spinner from 'react-bootstrap/Spinner';
 import useCategories from '../hooks/useCategories';
+import {faSearch} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 
 const Header = () => {
   const [categories, setCategories] = React.useState([]);
-  const {normalIndex} = useCategories();
+  const {normalIndex} = useCategories(); 
   const pathname = useLocation().pathname;
   const location = useLocation();
+  const [searchText, setSearchText] = React.useState('');
+
 
   React.useEffect(() => {
     normalIndex()
@@ -22,6 +28,23 @@ const Header = () => {
           setCategories(res.data.categories);
         });
   }, []);
+
+  const history = useHistory();
+
+  const doSearch = (e) => {
+    e.preventDefault();
+    history.push(`/products?search=${searchText}`);
+  };
+
+  const handleSearch = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      doSearch(e)
+    }
+  }
 
   const menuItems = () => {
     if (Object.keys(categories).length) {
@@ -68,7 +91,7 @@ const Header = () => {
           </NavDropdown>
           <Nav.Item>
             <Link
-              className={`nav-link  ${ pathname.includes("/about") ? 'active' :'' }`} to="/about"
+              className={`nav-link  ${ pathname.includes("/contact") ? 'active' :'' }`} to="/contact"
             >
               About
             </Link>
@@ -80,6 +103,18 @@ const Header = () => {
             </Link>
           </Nav.Item>
         </Nav>
+        <Nav.Item style={{marginLeft: 'auto'}}>
+          <input
+            type="text"
+            id='search'
+            value={searchText}
+            onChange={handleSearch}
+            onKeyUp={handleEnter}
+          />
+          <button onClick={doSearch}>
+            <FontAwesomeIcon icon={faSearch} />
+          </button>
+        </Nav.Item>
       </Navbar>
     );
   }

@@ -165,7 +165,7 @@ const ProductIndex = () => {
             <thead>
               <tr>
                 <th>ID</th>
-                <th></th>
+                <th>variante</th>
                 <th>Nombre</th>
                 <th>Precio</th>
                 <th></th>

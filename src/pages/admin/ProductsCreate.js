@@ -164,6 +164,7 @@ const ProductsCreate = () => {
               />
             </div>
             <div>
+              {/*
               {properties && properties.map((item, index) =>
                 <div key={item.id} className='ms-5'>
                   <label
@@ -179,6 +180,7 @@ const ProductsCreate = () => {
                   />
                 </div>,
               )}
+              */ }
             </div>
             <Dropzone
               style={{minWidth: '550px', margin: '20px 0'}}
