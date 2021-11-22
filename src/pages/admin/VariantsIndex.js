@@ -90,7 +90,6 @@ const VariantsIndex = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Talla</th>
               <th>Stock</th>
               <th>Precio</th>
               <th></th>

@@ -5,7 +5,7 @@ import App from './App';
 import {store} from './app/store';
 import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
-import 'bootswatch/dist/flatly/bootstrap.min.css';
+import 'bootswatch/dist/lux/bootstrap.min.css';
 
 require('dotenv').config();
 

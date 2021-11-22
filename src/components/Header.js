@@ -13,6 +13,8 @@ import useCategories from '../hooks/useCategories';
 const Header = () => {
   const [categories, setCategories] = React.useState([]);
   const {normalIndex} = useCategories();
+  const pathname = useLocation().pathname;
+  const location = useLocation();
 
   React.useEffect(() => {
     normalIndex()
@@ -26,9 +28,9 @@ const Header = () => {
       const renderCategories = categories.map((item) =>
         <NavDropdown.Item as='div'key={item.id}>
           <Link
-            className="nav-link"
+            className={`nav-link ${pathname.includes(`/categories/${item.value}`) ? 'active' : '' }`}
             to={`/categories/${item.value}`}
-            style={{color: 'gray'}}
+            style={{color: 'black'}}
           >
             {item.label}
           </Link>
@@ -45,7 +47,7 @@ const Header = () => {
     );
   };
 
-  const location = useLocation();
+ 
   if (location.pathname.includes('/admin')) {
     return (
       <AdminHeader />
@@ -56,8 +58,7 @@ const Header = () => {
         <Nav>
           <Nav.Item>
             <Link
-              className="nav-link"
-              to="/"
+              className={`nav-link  ${ pathname === "/" ? 'active' :'' }`} to="/"
             >
               Inicio
             </Link>
@@ -67,16 +68,15 @@ const Header = () => {
           </NavDropdown>
           <Nav.Item>
             <Link
-              className="nav-link"
-              to="/about"
+              className={`nav-link  ${ pathname.includes("/about") ? 'active' :'' }`} to="/about"
             >
               About
             </Link>
           </Nav.Item>
           <Nav.Item>
-            <Link className="nav-link" to="/cart"
+            <Link className={`nav-link  ${ pathname.includes("/cart") ? 'active' :'' }`} to="/cart"
             >
-              Cart
+              Carrito
             </Link>
           </Nav.Item>
         </Nav>
