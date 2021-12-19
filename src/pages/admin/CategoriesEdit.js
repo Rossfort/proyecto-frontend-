@@ -14,37 +14,19 @@ const CategoriesEdit = () => {
   const [loading, setLoading] = React.useState(false);
   const {id} = useParams();
   const {adminEdit, updateCategory} = useCategories();
-  const [files, setFiles] = React.useState([]);
-  const [imageSrc, setImageSrc] = React.useState(undefined);
   const [properties, setProperties] = React.useState([]);
   const [initialFormValues, setInitialFormValues] = React.useState({});
+  const [message, setMessage] = React.useState(undefined);
+  const [messageStatus, setMessageStatus] = React.useState('none')
 
   React.useEffect(() => {
     adminEdit(id).then((res) => {
       setCategory(res.data.category);
       setProperties(res.data.category.properties);
       setInitialFormValues({name: res.data.category.name});
-      if (res.data.image.encoded_image) {
-        const file = useUrlToFile(
-            res.data.image.encoded_image, res.data.image.filename,
-        );
-        setFiles([{errors: [], file: file, valid: true}]);
-      }
       initValues(res.data.category);
     });
   }, []);
-
-  const updateFiles = (incommingFiles) => {
-    setFiles(incommingFiles);
-  };
-
-  const onDelete = (id) => {
-    setFiles(files.filter((x) => x.id !== id));
-  };
-
-  const handleSee = (imageSource) => {
-    setImageSrc(imageSource);
-  };
 
   const initValues = (category) => {
     const values = {};
@@ -74,9 +56,24 @@ const CategoriesEdit = () => {
       }
     });
     updateCategory(id, fd)
-        .then(() => setSubmitStatus('success'))
-        .catch(() => setSubmitStatus('error'));
+        .then(() => {
+          setSubmitStatus('success');
+          setMessage('Categoria editada con exito');
+          setMessageStatus('block')
+        })
+        .catch(() => {
+          setMessage('Hubo un error intentalo mas tarde');
+          setMessageStatus('block')
+          setSubmitStatus('error');
+        },
+        );
   };
+
+  const handleClose = (e) => {
+    setMessageStatus('none')
+  };
+
+  console.log(message, messageStatus)
 
   return (
     <>
@@ -86,6 +83,23 @@ const CategoriesEdit = () => {
         btnVal='Crear Categoria'
       />
       <div className="admin-content-wrapper">
+        <div
+          className="alert alert-success mt-3 alert-dismissible fade show"
+          role="alert"
+          style={{display: `${messageStatus}`}}
+        >
+          <span
+            style={{color: 'gray'}}
+          >
+            {message}
+          </span>
+          <button
+            onClick={handleClose}
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"></button>
+        </div>
         <Formik
           enableReinitialize={true}
           initialValues={initialFormValues}
@@ -166,35 +180,6 @@ const CategoriesEdit = () => {
             );
           }}
         </Formik>
-        <Dropzone
-          view={'list'}
-          onChange={updateFiles}
-          value={files}
-          maxFiles={1}
-          maxFileSize={2998000}
-          label="Suelta tus archivos aquí"
-          accept=".png,image/*"
-          uploadingMessage={'Uploading...'}
-          localization={'ES-es'}
-        >
-          {files.map((file) => (
-            <FileItem
-              key={file.file.lastModified}
-              {...file}
-              onDelete={onDelete}
-              onSee={handleSee}
-              localization={'ES-es'}
-              preview
-              info
-              hd
-            />
-          ))}
-          <FullScreenPreview
-            imgSource={imageSrc}
-            openImage={imageSrc}
-            onClose={(e) => handleSee(undefined)}
-          />
-        </Dropzone>
       </div>
     </>
   );
