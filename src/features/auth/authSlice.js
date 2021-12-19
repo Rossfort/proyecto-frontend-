@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const initialState = {
   user: undefined,
+  errors: [],
 };
 
 export const authLogin = createAsyncThunk(
@@ -42,10 +43,13 @@ export const authSlice = createSlice({
     [authLogin.fulfilled]: (state, action) => {
       if (action.payload.logged_in === true) {
         state.user = action.payload.user;
+        state.errors = [];
+      } else {
+        state.errors = action.payload.errors;
       }
     },
     [authLogout.fulfilled]: (state, action) => {
-      state.user = null;
+      state.user = undefined;
     },
     [authAutoLogin.fulfilled]: (state, action) => {
       if (action.payload) {
@@ -53,7 +57,7 @@ export const authSlice = createSlice({
       }
     },
     [authAutoLogin.rejected]: (state, action) => {
-      state.user = null;
+      state.user = undefined;
     },
   },
 });

@@ -9,6 +9,7 @@ const useCategories = () => {
   };
 
   const normalCategoriesShow = (category, queryParams) => {
+    console.log(category, queryParams)
     return axios.get(
         process.env.REACT_APP_BASE_API_URL +
         `/api/categories/${category}?${queryParams}`,

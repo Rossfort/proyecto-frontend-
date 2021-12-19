@@ -53,6 +53,10 @@ const Cart = ({cart}) => {
 
   React.useEffect(() => {
     Object.entries(variants).forEach(([key, val]) => {
+      if (cart[val.id] > val.stock) {
+        dispatch(removeItem(val.id));
+        setStockError('Algunos productos no cuentan con suficiente stock');
+      }
       if (val.stock <= 0) {
         dispatch(removeItem(val.id));
         setStockError('Algunos productos ya no se encuentran disponibles');
@@ -87,19 +91,27 @@ const Cart = ({cart}) => {
     }
   };
 
-  console.log(stockError[0]);
+  const handleClose = (e) => {
+    e.target.parentElement.remove()
+  };
 
   return (
     <>
       {stockError &&
       <div
-        className="alert alert-warning"
+        className="alert alert-warning mt-3 alert-dismissible fade show"
         role="alert"
       >
         <span
           style={{color: 'gray'}}
         >
         </span>{stockError}
+        <button
+          onClick={handleClose}
+          type="button"
+          className="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"></button>
       </div>}
       <Row>
         <Col lg={8}>

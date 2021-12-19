@@ -39,9 +39,9 @@ const Header = () => {
 
   const handleEnter = (e) => {
     if (e.key === 'Enter') {
-      doSearch(e)
+      doSearch(e);
     }
-  }
+  };
 
   const menuItems = () => {
     if (Object.keys(categories).length) {
@@ -74,47 +74,51 @@ const Header = () => {
     );
   } else {
     return (
-      <Navbar bg="dark" variant="dark">
-        <Nav>
-          <Nav.Item>
-            <Link
-              className="nav-link"
-              to="/"
-            >
+      <header className='p-3 bg-dark text-white'>
+        <div className="container">
+          <Navbar bg="dark" variant="dark">
+            <Nav>
+              <Nav.Item>
+                <Link
+                  className="nav-link"
+                  to="/"
+                >
               Inicio
-            </Link>
-          </Nav.Item>
-          <NavDropdown title='Products'>
-            {menuItems()}
-          </NavDropdown>
-          <Nav.Item>
-            <Link
-              className="nav-link"
-              to="/contact"
-            >
+                </Link>
+              </Nav.Item>
+              <NavDropdown title='Products'>
+                {menuItems()}
+              </NavDropdown>
+              <Nav.Item>
+                <Link
+                  className="nav-link"
+                  to="/contact"
+                >
               About
-            </Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Link className="nav-link" to="/cart"
-            >
+                </Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Link className="nav-link" to="/cart"
+                >
               Cart
-            </Link>
-          </Nav.Item>
-        </Nav>
-        <Nav.Item style={{marginLeft: 'auto'}}>
-          <input
-            type="text"
-            id='search'
-            value={searchText}
-            onChange={handleSearch}
-            onKeyUp={handleEnter}
-          />
-          <button onClick={doSearch}>
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-        </Nav.Item>
-      </Navbar>
+                </Link>
+              </Nav.Item>
+            </Nav>
+            <Nav.Item style={{marginLeft: 'auto'}}>
+              <input
+                type="text"
+                id='search'
+                value={searchText}
+                onChange={handleSearch}
+                onKeyUp={handleEnter}
+              />
+              <button onClick={doSearch}>
+                <FontAwesomeIcon icon={faSearch} />
+              </button>
+            </Nav.Item>
+          </Navbar>
+        </div>
+      </header>
     );
   }
 };

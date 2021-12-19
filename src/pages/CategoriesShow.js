@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import {Link, useLocation, useHistory} from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import Select from 'react-select';
+import '../styles/products.css';
 
 const CategoriesShow = () => {
   const [products, setProducts] = React.useState([]);
@@ -22,24 +23,32 @@ const CategoriesShow = () => {
   } = useCategories();
   const [ffilters, setFfilters] = React.useState({});
   const [filters, setFilters] = React.useState([]);
+  const [order, setOrder] = React.useState('&order=1');
   const {url, urlNoOffset} = useFilter(ffilters, 'properties');
   const history = useHistory();
   const queryString = useLocation().search;
 
   React.useEffect(() => {
-    normalCategoriesShow(name, url)
+    let qs = queryString.substring(1);
+    if (Object.keys(ffilters).length) qs = '&' + qs;
+    normalCategoriesShow(name, url + qs + order)
         .then((res) => {
           setProducts(res.data.products);
           setTotalPages(res.data.total_count);
         });
-  }, [name, url]);
+  }, [name, url, queryString, order]);
 
   React.useEffect(() => {
+    setFfilters([]);
     getPropertyTypes(name)
         .then((res) => {
           setPropertyTypes(res.data.properties);
         });
   }, [name]);
+
+  const handleOrder = (e) => {
+    setOrder(`&order=${e.target.value}`);
+  };
 
   const fixFilters = (filters) => {
     const newFilters = {};
@@ -99,21 +108,24 @@ const CategoriesShow = () => {
       />;
     }
   }
-  const renderArr = products.map((item) => (
-    <Col key={item.id} xs={8} md={6} lg={3} className='m-auto'>
-      <Link to={`/products/${item.id}`}>
-        <div className="product-card d-flex flex-column m-1">
-          <img
-            className="img-fluid"
-            src={item.master_image}
-            alt=""
-          />
-          <p className='text-truncate'>{item.title}</p>
-          <p>{item.price}</p>
-        </div>
-      </Link>
-    </Col>
-  ));
+  const renderArr = products.map((item) => {
+    console.log(item)
+    return (
+      <Col key={item.id} xs={8} md={6} lg={3} className='m-auto'>
+        <Link to={`/products/${item.id}`}>
+          <div className="product-card d-flex flex-column m-1">
+            <img
+              className="img-fluid"
+              src={item.master_image}
+              alt=""
+            />
+            <p className='text-truncate'>{item.title}</p>
+            <p>{item.price}</p>
+          </div>
+        </Link>
+      </Col>
+    );
+  });
 
   return (
     <Row className="mt-5">
@@ -123,8 +135,19 @@ const CategoriesShow = () => {
       >
         {renderProperties}
       </Col>
-      <Col className='d-flex flex-wrap justify-content-between products-container'>
-        {productHolder ? undefined : renderArr}
+      <Col >
+        <div>
+          <select id="order" name="order" onChange={handleOrder}>
+            <option value="1">Precio mas bajo</option>
+            <option value="2">Precio mas alto</option>
+            <option value="3">Mas relevante</option>
+          </select>
+        </div>
+        <div
+          className="d-flex flex-wrap justify-content-between products-container"
+        >
+          {productHolder ? undefined : renderArr}
+        </div>
       </Col>
       <div className="d-flex justify-content-center">
         {productHolder ? productHolder : <Pagination

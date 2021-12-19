@@ -11,6 +11,7 @@ const Login = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const loggedIn = useSelector((state) => state.auth.user);
+  const authErrors = useSelector((state) => state.auth.errors);
 
   React.useEffect(() => {
     console.log(location.pathname);
@@ -32,8 +33,10 @@ const Login = () => {
     dispatch(authLogin({admin: {email, password}}));
   };
 
+  console.log(authErrors)
   return (
     <div className="admin-content-wrapper">
+      {authErrors.length ? (<div className='mb-3'><span className='text-danger'>{authErrors[0]}</span></div>) : undefined}
       <form onSubmit={handleSubmit}>
         <label
           className="form-label"
@@ -47,6 +50,7 @@ const Login = () => {
           className="form-control"
           type="text"
           id="email"
+          required={true}
         />
         <label
           className="form-label"htmlFor="password"
@@ -58,6 +62,7 @@ const Login = () => {
           value={password}
           className="form-control"type="password"
           id="password"
+          required={true}
         />
 
         <input

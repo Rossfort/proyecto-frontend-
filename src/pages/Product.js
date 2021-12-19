@@ -11,11 +11,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faChevronUp, faChevronDown} from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import SliderForProducts from '../components/SliderForProducts';
+import axios from 'axios';
 
 const Product = () => {
   const [quantity, setQuantity] = React.useState(1);
   const [images, setImages] = React.useState([]);
   const [selectedVariant, setSelectedVariant] = React.useState();
+  const [nInArray, setNInArray] = React.useState(0);
   const [hasVariants, setHasVariants] = React.useState(false);
   const dispatch = useDispatch();
   const {id} = useParams();
@@ -44,13 +46,18 @@ const Product = () => {
     }
   }, [product]);
 
+  React.useEffect(() => {
+    axios.get(process.env.REACT_APP_BASE_API_URL + `/api/products/${id}/visit`);
+  }, []);
+
 
   const addToCart = () => {
     dispatch(addItem({productId: selectedVariant, quantity: +quantity}));
   };
 
   const handleSelected = (e) => {
-    setSelectedVariant(e.target.value);
+    setSelectedVariant(product.variants[e.target.value].id);
+    setNInArray(e.target.value);
   };
 
   const handleQuantity = (e) => {
@@ -58,8 +65,14 @@ const Product = () => {
   };
 
   const handleIncreaseQuantity = () => {
+    if (quantity >= product.variants[nInArray].stock) {
+      setQuantity(quantity);
+      return;
+    }
     setQuantity(quantity + 1);
   };
+
+  console.log(nInArray, 'asddsaasd');
 
   const handleDecreaseQuantity = () => {
     if (quantity === 1) {
@@ -103,17 +116,19 @@ const Product = () => {
       </Col>
       <Col md={6}>
         <h1 className="text-center">{product.title}</h1>
-        <h2 className="text-center">{formatter.format(product.master_price)}</h2>
+        <h2 className="text-center">
+          {formatter.format(product.master_price)}
+        </h2>
         <dl>
           {renderProperties}
         </dl>
         {hasVariants ? <select
           className="form-select"
           onChange={handleSelected}>
-          {product.variants.map((item) => (
+          {product.variants.map((item, index) => (
             <option
               key={item.id}
-              value={item.id}
+              value={index}
             >{item.size}</option>
           ))}
         </select> : ''

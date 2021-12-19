@@ -8,7 +8,6 @@ import Spinner from 'react-bootstrap/Spinner';
 
 const PrivateRoute = ({children, ...rest}) => {
   const auth = useSelector((state) => state.auth);
-  console.log(auth);
 
   if (auth.user === undefined) {
     return <Spinner

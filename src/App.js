@@ -6,6 +6,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Product from './pages/Product';
 import Login from './pages/admin/Login';
 import Products from './pages/Products';
@@ -44,7 +45,7 @@ function App() {
   return (
     <Router>
       <Header />
-      <Container>
+      <Container className='d-flex flex-column min-vh-100'>
         <Switch>
           <Route path="/about">
           </Route>
@@ -118,6 +119,7 @@ function App() {
             <Home />
           </Route>
         </Switch>
+        <Footer />
       </Container>
     </Router>
   );

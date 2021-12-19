@@ -1,8 +1,9 @@
 const useParams = (params, scope = null) => {
+  console.log(params, scope);
   const serialize = (params) => {
     const str = [];
     Object.entries(params).forEach(([key, val]) => {
-      if (val.length > 1) {
+      if (Array.isArray(val)) {
         val.forEach((item) => {
           str.push( `${scope ? `${scope}[${encodeURIComponent(key)}][]` : encodeURIComponent(key)}=${encodeURIComponent(item)}`);
         });
@@ -20,7 +21,6 @@ const useParams = (params, scope = null) => {
     });
     str.pop();
     return str.join('&');
-    return str;
   };
   return {url: serialize(params), urlNoOffset: removeOffset(params)};
 };
