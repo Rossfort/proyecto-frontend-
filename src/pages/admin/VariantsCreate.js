@@ -31,6 +31,7 @@ const VariantsCreate = () => {
     formData.append('variant[price]', values.variant.price);
     formData.append('variant[stock]', values.variant.stock);
     formData.append('variant[size]', 'a');
+
     Object.entries(values.product_property).forEach(([k, v], index) => {
       if (v !== undefined) {
         formData.append(`variant[product_properties_attributes][${index}][value]`, v.value);
