@@ -41,7 +41,7 @@ const AdminHeader = () => {
               <Link to="/admin/orders"
                 className={`nav-link  ${ pathname.includes("/admin/orders") ? 'active' :'' }`}
               >
-                Ordenes
+              Ordenes
               </Link>
             </li>
             <li className="nav-item">
@@ -58,27 +58,16 @@ const AdminHeader = () => {
               Categorias
               </Link>
             </li>
-            <li className="nav-item">
-              <Link
-                to="#" className="nav-link"
-              >
-              Stock
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="#" className="nav-link"
-              >
-                Slider
-              </Link>
-            </li>
+            
           </ul>
         </nav>
       </div>
       <div className="admin-nav-footer">
         <ul className="nav flex-column">
           <li>
-            <button onClick={handleDisconect}>
-              Desconectar
+            <br></br>
+            <button onClick={handleDisconect} >
+                    Desconectar
             </button>
           </li>
         </ul>

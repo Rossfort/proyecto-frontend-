@@ -49,7 +49,7 @@ export const authSlice = createSlice({
       }
     },
     [authLogout.fulfilled]: (state, action) => {
-      state.user = undefined;
+      state.user = null;
     },
     [authAutoLogin.fulfilled]: (state, action) => {
       if (action.payload) {
@@ -57,7 +57,7 @@ export const authSlice = createSlice({
       }
     },
     [authAutoLogin.rejected]: (state, action) => {
-      state.user = undefined;
+      state.user = null;
     },
   },
 });

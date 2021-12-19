@@ -142,7 +142,7 @@ const Cart = ({cart}) => {
                     <span>
                       {variants[id].title}
                       <p>
-                      Talla {variants[id].size.toUpperCase()}
+                      Variante {variants[id].size.toUpperCase()}
                       </p>
                     </span>
                   </td>

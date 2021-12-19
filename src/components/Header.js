@@ -97,7 +97,7 @@ const Header = () => {
                   className={`nav-link  ${ pathname.includes("/contact") ? 'active' :'' }`} to="/contact"
                   to="/contact"
                 >
-              Contactar
+              Contacto
                 </Link>
               </Nav.Item>
               <Nav.Item>

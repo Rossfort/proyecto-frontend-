@@ -38,6 +38,7 @@ const AfterTransaction = () => {
       </div>,
     );
     return (
+      
       <div className='container border-start border-end px-5'>
         <div className="row mb-4 border-bottom">
           <h1 className='text-center'>Transaccion exitosa</h1>
@@ -45,15 +46,15 @@ const AfterTransaction = () => {
         <div className="row border-bottom">
           <div className="row">
             <div className="col">
-              <div className="row fw-bold">Transaction date</div>
+              <div className="row fw-bold">Fecha transaccion</div>
               <div className="row">{transaction.order.created_at}</div>
             </div>
             <div className="col text-center">
-              <div className="row fw-bold">Transaction id</div>
+              <div className="row fw-bold">Transaccion ID</div>
               <div className="row">{transaction.order.uuid}</div>
             </div>
             <div className="col text-center">
-              <div className="row fw-bold">Address</div>
+              <div className="row fw-bold">Direccion</div>
               <div className="row">
                 {transaction.order.comuna + transaction.order.address}
               </div>
