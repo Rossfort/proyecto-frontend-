@@ -8,22 +8,13 @@ import {useFormik} from 'formik';
 const CategoriesNew = () => {
   const [loading, setLoading] = React.useState(false);
   const [submitStatus, setSubmitStatus] = React.useState('idle');
-  const [files, setFiles] = React.useState([]);
-  const [imageSrc, setImageSrc] = React.useState(undefined);
   const {createCategory} = useCategories();
+  const [message, setMessage] = React.useState(undefined);
+  const [messageStatus, setMessageStatus] = React.useState('none');
 
-  console.log(imageSrc);
 
-  const updateFiles = (incommingFiles) => {
-    setFiles(incommingFiles);
-  };
-
-  const onDelete = (id) => {
-    setFiles(files.filter((x) => x.id !== id));
-  };
-
-  const handleSee = (imageSource) => {
-    setImageSrc(imageSource);
+  const handleClose = (e) => {
+    setMessageStatus('none');
   };
 
   const fform = useFormik({
@@ -33,10 +24,17 @@ const CategoriesNew = () => {
     onSubmit: (values) => {
       const formData = new FormData();
       formData.append('category[name]', values.name);
-      formData.append('category[image]', files[0].file);
       createCategory(formData)
-          .then(() => setSubmitStatus('success'))
-          .catch(() => setSubmitStatus('error'));
+          .then(() => {
+            setMessage('Categoria editada con exito');
+            setMessageStatus('block');
+            setSubmitStatus('success');
+          })
+          .catch(() => {
+            setMessage('Categoria editada con exito');
+            setMessageStatus('block');
+            setSubmitStatus('error');
+          });
     },
     validate: (values) => {
       const errors = {};
@@ -55,6 +53,23 @@ const CategoriesNew = () => {
         title={'Categorias'}
       />
       <div className="admin-content-wrapper">
+        <div
+          className="alert alert-success mt-3 alert-dismissible fade show"
+          role="alert"
+          style={{display: `${messageStatus}`}}
+        >
+          <span
+            style={{color: 'gray'}}
+          >
+            {message}
+          </span>
+          <button
+            onClick={handleClose}
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"></button>
+        </div>
         <div className="row">
           <div className="col">
           </div>
@@ -76,36 +91,6 @@ const CategoriesNew = () => {
               />
               {fform.errors.name && <div
                 className='text-danger'>{fform.errors.name}</div>}
-              <Dropzone
-                style={{minWidth: '550px'}}
-                view={'list'}
-                onChange={updateFiles}
-                value={files}
-                maxFiles={1}
-                maxFileSize={2998000}
-                label="Suelta tus archivos aquí"
-                accept=".png,image/*"
-                uploadingMessage={'Uploading...'}
-                localization={'ES-es'}
-              >
-                {files.map((file) => (
-                  <FileItem
-                    key={file}
-                    {...file}
-                    onDelete={onDelete}
-                    onSee={handleSee}
-                    localization={'ES-es'}
-                    preview
-                    info
-                    hd
-                  />
-                ))}
-                <FullScreenPreview
-                  imgSource={imageSrc}
-                  openImage={imageSrc}
-                  onClose={(e) => handleSee(undefined)}
-                />
-              </Dropzone>
               <input type="submit" className='btn btn-primary mx-auto mt-4'/>
             </form>
           </div>

@@ -92,7 +92,7 @@ const Cart = ({cart}) => {
   };
 
   const handleClose = (e) => {
-    e.target.parentElement.remove()
+    e.target.parentElement.remove();
   };
 
   return (
